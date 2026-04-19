@@ -1,7 +1,9 @@
 "use client";
 
 import { login } from "@/lib/auth";
-import type { ApiError } from "@/lib/service";
+import type { ApiError } from "@/lib/api";
+import { useAuthStore } from "@/stores/authStore";
+import { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
@@ -25,11 +27,14 @@ const LoginSchema = Yup.object({
 
 export default function SignIn() {
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
 
   const { mutate, isPending } = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (user: User) => {
+      setUser(user);
       router.replace("/");
+      router.refresh();
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Login failed");

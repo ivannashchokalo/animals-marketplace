@@ -1,6 +1,8 @@
 "use client";
 
 import { register } from "@/lib/auth";
+import { useAuthStore } from "@/stores/authStore";
+import { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
 import { ApiError } from "next/dist/server/api-utils";
@@ -27,11 +29,14 @@ const RegisterSchema = Yup.object({
 
 export default function SignUp() {
   const router = useRouter();
+  const setUser = useAuthStore((state) => state.setUser);
 
   const { mutate, isPending } = useMutation({
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: (user: User) => {
+      setUser(user);
       router.replace("/");
+      router.refresh(); // примусово перезапитує серверні компоненти і оновлює їхні дані без повного перезавантаження сторінки
     },
     onError: (error: ApiError) => {
       toast.error(error.response?.data?.message || "Registration failed");

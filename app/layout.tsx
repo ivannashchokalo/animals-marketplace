@@ -4,6 +4,7 @@ import Footer from "@/components/Footer/Footer";
 import TanstackQueryProvider from "@/providers/TanstackQueryProvider";
 import { Metadata } from "next";
 import { Toaster } from "sonner";
+import AuthProvider from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Animals marketplace",
@@ -43,10 +44,12 @@ export default function RootLayout({
         }}
       >
         <TanstackQueryProvider>
-          <Header />
-          <main style={{ flexGrow: 1 }}>{children}</main>
-          <Toaster />
-          <Footer />
+          <AuthProvider>
+            <Header />
+            <main style={{ flexGrow: 1 }}>{children}</main>
+            <Toaster />
+            <Footer />
+          </AuthProvider>
         </TanstackQueryProvider>
       </body>
     </html>

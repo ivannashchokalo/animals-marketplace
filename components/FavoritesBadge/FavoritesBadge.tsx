@@ -1,9 +1,13 @@
 "use client";
 
-import { useFavoritesStore } from "@/stores/favoritesStore";
+import { useQuery } from "@tanstack/react-query";
+import { getFavorites } from "@/lib/usersService";
 
 export default function FavoritesBadge() {
-  const count = useFavoritesStore((state) => state.favoriteIds.length);
+  const { data: favorites } = useQuery({
+    queryKey: ["favorites"],
+    queryFn: getFavorites,
+  });
 
-  return <p>favorite {count}</p>;
+  return <p>favorite {favorites?.length}</p>;
 }

@@ -1,4 +1,4 @@
-import { fetchAnimalById, fetchAnimals } from "@/lib/animals-service";
+import { fetchAnimalById, fetchAnimals } from "@/lib/animalsClient";
 import {
   dehydrate,
   HydrationBoundary,
@@ -10,6 +10,7 @@ import { Metadata } from "next";
 import AnimalDetailsClient from "./AnimalDetailsClient";
 import { notFound } from "next/navigation";
 import AnimalsByCategoryClient from "./AnimalsByCategoryClient";
+import { serverFetchAnimalById, serverFetchAnimals } from "@/lib/animalsServer";
 
 interface Props {
   params: Promise<{
@@ -67,7 +68,7 @@ export default async function AnimalsByCategory({ params }: AnimalsProps) {
 
     await queryClient.prefetchQuery({
       queryKey: ["animals", { page: 1, type, search: "" }],
-      queryFn: () => fetchAnimals(page, type, search),
+      queryFn: () => serverFetchAnimals(page, type, search),
     });
 
     return (
@@ -86,7 +87,7 @@ export default async function AnimalsByCategory({ params }: AnimalsProps) {
 
     await queryClient.prefetchQuery({
       queryKey: ["animal", id],
-      queryFn: () => fetchAnimalById(id),
+      queryFn: () => serverFetchAnimalById(id),
     });
 
     return (

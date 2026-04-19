@@ -1,20 +1,13 @@
 import { Animal, AnimalId } from "@/types/animal";
-import { nextServer } from "./service";
+import { nextServer } from "./api";
 
-interface FetchAnimalsRequest {
+export interface FetchAnimalsRequest {
   page: number;
   perPage: number;
   totalItems: number;
   totalPages: number;
   animals: Animal[];
 }
-
-// interface FetchAnimalsParams {
-//   page?: number;
-//   perPage?: number;
-//   type?: string;
-//   search?: string;
-// }
 
 export const fetchAnimals = async (page = 1, type = "", search = "") => {
   const { data } = await nextServer.get<FetchAnimalsRequest>("/animals", {
@@ -30,7 +23,6 @@ export const fetchAnimals = async (page = 1, type = "", search = "") => {
 };
 
 export const fetchAnimalById = async (id: AnimalId) => {
-  console.log("fetch");
   const { data } = await nextServer.get<Animal>(`/animals/${id}`);
   return data;
 };

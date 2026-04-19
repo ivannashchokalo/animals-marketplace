@@ -1,4 +1,5 @@
-import { nextServer } from "./service";
+import { User } from "@/types/user";
+import { nextServer } from "./api";
 
 interface LoginPayload {
   email: string;
@@ -22,5 +23,15 @@ export const register = async (body: RegisterPayload) => {
 
 export const logout = async () => {
   const { data } = await nextServer.post("/auth/logout");
+  return data;
+};
+
+export const refresh = async () => {
+  const { data } = await nextServer.post("/auth/refresh");
+  return data;
+};
+
+export const getMe = async () => {
+  const { data } = await nextServer.get<User>("/auth/me");
   return data;
 };

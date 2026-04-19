@@ -1,35 +1,42 @@
 "use client";
 
 import AnimalsList from "@/components/AnimalsList/AnimalsList";
-import { fetchAnimals } from "@/lib/animals-service";
-import { useFavoritesStore } from "@/stores/favoritesStore";
-import { useQuery } from "@tanstack/react-query";
+import { clearFavorites, getFavoriteAnimals } from "@/lib/usersService";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function FavoritesAnimalsClient() {
-  const favoriteIds = useFavoritesStore((state) => state.favoriteIds);
-  const clearFavorites = useFavoritesStore((state) => state.clearFavorites);
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ["animals"],
-    queryFn: () => fetchAnimals({ perPage: 1000 }),
+  const { data } = useQuery({
+    queryKey: ["favoriteAnimals"],
+    queryFn: getFavoriteAnimals,
   });
 
-  const favoriteAnimals = data?.animals.filter((animal) =>
-    favoriteIds.includes(animal._id),
-  );
+  const queryClient = useQueryClient();
 
-  const handleClearFavorive = () => {
-    clearFavorites();
-  };
+  const { mutate } = useMutation({
+    mutationFn: clearFavorites,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["favorites"],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["favoriteAnimals"],
+      });
+    },
+  });
 
   return (
-    <div>
-      <button type="button" onClick={handleClearFavorive}>
-        Clear
-      </button>
-      {favoriteAnimals && favoriteAnimals?.length > 0 && (
-        <AnimalsList animals={favoriteAnimals} />
-      )}
-    </div>
+    <>
+      <div>
+        <button
+          disabled={data?.length < 1}
+          type="button"
+          onClick={() => mutate()}
+        >
+          Clear
+        </button>
+        {data?.length > 0 && <AnimalsList animals={data} />}
+      </div>
+    </>
   );
 }

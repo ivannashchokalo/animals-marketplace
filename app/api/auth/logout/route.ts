@@ -5,9 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST() {
   const cookieStore = await cookies();
 
-  console.log(123, cookieStore.toString());
-
-  await api.post("/auth/logout", {
+  await api.post("/auth/logout", null, {
     headers: {
       Cookie: cookieStore.toString(),
     },

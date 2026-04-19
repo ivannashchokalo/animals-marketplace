@@ -1,7 +1,7 @@
 "use client";
 
 import { DEFAULT_PET } from "@/constants/images";
-import { fetchAnimalById } from "@/lib/animals-service";
+import { fetchAnimalById } from "@/lib/animalsClient";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useParams } from "next/navigation";
