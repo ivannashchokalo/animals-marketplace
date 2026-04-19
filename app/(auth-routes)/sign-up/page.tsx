@@ -1,11 +1,11 @@
 "use client";
 
+import { ApiError } from "@/app/api/api";
 import { register } from "@/lib/auth";
 import { useAuthStore } from "@/stores/authStore";
 import { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
-import { ApiError } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import * as Yup from "yup";

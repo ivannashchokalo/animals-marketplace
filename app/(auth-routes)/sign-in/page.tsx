@@ -1,7 +1,7 @@
 "use client";
 
+import { ApiError } from "@/app/api/api";
 import { login } from "@/lib/auth";
-import type { ApiError } from "@/lib/api";
 import { useAuthStore } from "@/stores/authStore";
 import { User } from "@/types/user";
 import { useMutation } from "@tanstack/react-query";

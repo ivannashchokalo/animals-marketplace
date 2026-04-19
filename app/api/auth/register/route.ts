@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       {
         error:
-          (error as ApiError).response?.data?.error ??
+          (error as ApiError).response?.data?.message ??
           (error as ApiError).message,
       },
       { status: (error as ApiError).status },
